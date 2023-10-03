@@ -11,7 +11,13 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
-
+import csv
+data_list = []
+with open("./data.csv", "r") as csvfile:
+    reader_variable = csv.reader(csvfile, delimiter="\t")
+    for row in reader_variable:
+        data_list.append(row)
+#print("--------------------------------------------------")
 
 def pregunta_01():
     """
@@ -21,7 +27,12 @@ def pregunta_01():
     214
 
     """
-    return
+    result = 0
+    for number in data_list:
+        result += int(number[1])
+    
+    return result
+
 
 
 def pregunta_02():
@@ -39,8 +50,22 @@ def pregunta_02():
     ]
 
     """
-    return
+    final_list = []
+    letter_counts = {}
+    
+    for row in data_list:
+        if row[0] in letter_counts:
+            letter_counts[row[0]] += 1
+        else:
+            letter_counts[row[0]] = 1
 
+    for letter, count in letter_counts.items():
+        final_list.append((letter, count))
+    final_list.sort(key=lambda x: x[0])
+    
+    return final_list
+
+pregunta_02()
 
 def pregunta_03():
     """
@@ -57,7 +82,21 @@ def pregunta_03():
     ]
 
     """
-    return
+    sum_dict = {}
+    final_list = []
+
+    for row in data_list:
+        if row[0] in sum_dict:
+            sum_dict[row[0]] += int(row[1])
+        else:
+            sum_dict[row[0]] = int(row[1])
+
+    for letter, sum in sum_dict.items():
+        final_list.append((letter, sum))
+    final_list.sort(key=lambda x: x[0])
+    
+
+    return final_list
 
 
 def pregunta_04():
@@ -82,7 +121,23 @@ def pregunta_04():
     ]
 
     """
-    return
+    month_dict = {}
+    final_list = []
+
+    for row in data_list:
+        month = row[2].split("-")[1]
+        if month in month_dict:
+            month_dict[month] += 1
+        else:
+            month_dict[month] = 1
+
+    for month, count in month_dict.items():
+        final_list.append((month, count))
+    final_list.sort(key=lambda x: x[0])
+    
+    return final_list
+
+
 
 
 def pregunta_05():
@@ -100,7 +155,21 @@ def pregunta_05():
     ]
 
     """
-    return
+    final_list = []
+    letter_dict = {}
+    for row in data_list:
+        if row[0] in letter_dict:
+            letter_dict[row[0]].append(int(row[1]))
+        else:
+            letter_dict[row[0]] = [int(row[1])]
+
+    for letter, values in letter_dict.items():
+        final_list.append((letter, max(values), min(values)))
+    final_list.sort(key=lambda x: x[0])
+    
+
+    return final_list
+
 
 
 def pregunta_06():
@@ -125,7 +194,23 @@ def pregunta_06():
     ]
 
     """
-    return
+    key_dict = {}
+    final_list = []
+
+    for row in data_list:
+        key_list = row[4].split(",")
+        for key in key_list:
+            if key.split(":")[0] in key_dict:
+                key_dict[key.split(":")[0]].append(int(key.split(":")[1]))
+            else:
+                key_dict[key.split(":")[0]] = [int(key.split(":")[1])]
+
+    for key, values in key_dict.items():
+        final_list.append((key, min(values), max(values)))
+    final_list.sort(key=lambda x: x[0])
+    
+
+    return final_list
 
 
 def pregunta_07():
@@ -149,7 +234,22 @@ def pregunta_07():
     ]
 
     """
-    return
+    number_dict = {}
+    final_list = []
+
+    for row in data_list:
+        if row[1] in number_dict:
+            number_dict[row[1]].append(row[0])
+        else:
+            number_dict[row[1]] = [row[0]]
+
+    for number, letters in number_dict.items():
+        final_list.append((int(number), letters))
+    final_list.sort(key=lambda x: x[0])
+
+    return final_list
+
+
 
 
 def pregunta_08():
@@ -174,7 +274,15 @@ def pregunta_08():
     ]
 
     """
-    return
+    data_list = pregunta_07()
+    final_list = []
+    for row in data_list:
+        unique_letters = []
+        [unique_letters.append(x) for x in row[1] if x not in unique_letters]
+        unique_letters.sort()
+        final_list.append((row[0], unique_letters))
+    return final_list
+
 
 
 def pregunta_09():
@@ -197,7 +305,19 @@ def pregunta_09():
     }
 
     """
-    return
+    letter_dict = {}
+    
+    for row in data_list:
+        key_list = row[4].split(",")
+        for key in key_list:
+            if key.split(":")[0] in letter_dict:
+                letter_dict[key.split(":")[0]] += 1
+            else:
+                letter_dict[key.split(":")[0]] = 1
+
+    letter_dict = {key: letter_dict[key] for key in sorted(letter_dict.keys())}
+
+    return letter_dict
 
 
 def pregunta_10():
@@ -218,7 +338,11 @@ def pregunta_10():
 
 
     """
-    return
+    final_list = []
+    for row in data_list:
+        final_list.append((row[0], len(row[3].split(",")), len(row[4].split(","))))
+
+    return final_list
 
 
 def pregunta_11():
@@ -239,7 +363,18 @@ def pregunta_11():
 
 
     """
-    return
+    letter_dict = {}
+    for row in data_list:
+        letter_list = row[3].split(",")
+        for letter in letter_list:
+            if letter in letter_dict:
+                letter_dict[letter] += int(row[1])
+            else: 
+                letter_dict[letter] = int(row[1])
+    letter_dict = {key: letter_dict[key] for key in sorted(letter_dict.keys())}                
+    return letter_dict
+
+pregunta_11()
 
 
 def pregunta_12():
@@ -257,4 +392,16 @@ def pregunta_12():
     }
 
     """
-    return
+    letter_dict = {}
+    for row in data_list:
+        number_sum = row[4].split(",")
+        number_sum = sum([int(x.split(":")[1]) for x in number_sum])
+        if row[0] in letter_dict:
+            letter_dict[row[0]] += number_sum
+        else:
+            letter_dict[row[0]] = number_sum
+    letter_dict = {key: letter_dict[key] for key in sorted(letter_dict.keys())}
+
+
+    return letter_dict
+
